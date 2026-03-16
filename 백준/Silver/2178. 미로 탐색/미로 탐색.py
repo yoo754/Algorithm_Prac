@@ -1,37 +1,31 @@
+#2178 미로탐색
+
 from collections import deque
+
+N, M = map(int, input().split())
+
+board = [list(map(int, input().strip())) for _ in range(N)]
+
+dq =deque()
+visited = [[0]*M for _ in range(N)]
+
+dq.append((0,0,1))
+visited[0][0] = 1
 
 dr = [-1,1,0,0]
 dc = [0,0,-1,1]
 
-N, M = map(int, input().split())
+cnt=0
+while dq:
+  r,c, dist = dq.popleft()
+  if r == N-1 and c == M-1 :
+    print(dist)
+    break
 
-maze = set()
-visited = set()
+  for d in range(4):
+    nr = dr[d] +r
+    nc= dc[d] +c
 
-# 걍 1위치를 전부 좌표화
-for i in range(N):
-    k = input()
-    k = list(str(k)) # 공백없는 문자열 리스트화
-    m = 0
-    for j in k:
-        if j == "1":
-            maze.add((i,m))
-        m += 1
-
-queue = deque([(0,0,0)])
-
-while queue:
-    r,c, dist = queue.popleft()
-    
-    if r == (N-1) and c == (M-1):
-        print(dist+1)
-        break
-        
-    for d in range(4):
-        nr, nc = dr[d] + r, dc[d] + c
-                 
-        if  0 <= nr < N and 0 <= nc < M and (nr, nc) in maze and (nr, nc) not in visited:
-                            
-            visited.add((nr, nc))
-            queue.append((nr, nc, dist+1))
-            
+    if 0<=nr<N and 0<=nc<M and visited[nr][nc] == 0 and board[nr][nc]==1:
+      visited[nr][nc] = 1
+      dq.append((nr, nc, dist+1))
